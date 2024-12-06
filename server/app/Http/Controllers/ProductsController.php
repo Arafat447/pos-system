@@ -77,9 +77,28 @@ class ProductsController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Products $products)
+    public function update(Request $request, $id)
     {
-        //
+        $product = Products::find($id);
+        $data = $request->validate([
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'trade_offer_min_qty' => 'nullable|string',
+            'trade_offer_get_qty' => 'nullable|string',
+            'discount' => 'nullable|numeric',
+            'discount_or_trade_offer_start_date' => 'nullable|date',
+            'discount_or_trade_offer_end_date' => 'nullable|date',
+        ]);
+    
+        // Update the product with validated data
+        $product->update($data);
+    
+        // Return the updated product
+        return response()->json([
+            'message' => 'Product updated successfully.',
+            'product' => $product,
+        ]);
     }
 
     /**

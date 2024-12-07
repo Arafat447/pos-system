@@ -2,6 +2,8 @@
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import { fetchProducts } from "../api";
 import { use, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   addToCart,
   updateQuantity,
@@ -37,11 +39,20 @@ export default function pos() {
   };
   const handleUpdate = (id, type, qty) => {
     let quantity = type === "inc" ? parseInt(qty) + 1 : parseInt(qty) - 1;
-    dispatch(updateQuantity({ id, quantity }));
+    dispatch(updateQuantity({ id, qty: quantity }));
+  };
+  const handleChangeQty = (item, e) => {
+    const { value } = e.target;
+    if (value <= parseInt(item?.stock)) {
+      dispatch(updateQuantity({ id: item.id, qty: value }));
+    } else {
+      toast.error("Stock is not enough");
+    }
   };
   console.log(cart, "cart");
   return (
     <div className="bg-white">
+      <ToastContainer />
       <div className="h-screen  text-black mx-auto container">
         <h1 className="text-2xl font-bold ">POS</h1>
         <div className="flex justify-center align-center">
@@ -69,7 +80,7 @@ export default function pos() {
                     <div className="flex w-full space-x-2 sm:space-x-4">
                       <img
                         className="flex-shrink-0 object-cover w-20 h-20 dark:border- rounded outline-none sm:w-32 sm:h-32 dark:bg-gray-500"
-                        src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&amp;ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80"
+                        src="https://picsum.photos/200"
                         alt="Polaroid camera"
                       />
                       <div className="flex flex-col justify-between w-full pb-4">
@@ -81,20 +92,26 @@ export default function pos() {
                           </div>
                           <div>
                             <button
-                              onClick={handleDecrease}
+                              onClick={() =>
+                                handleUpdate(item.id, "dec", item.qty)
+                              }
                               className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none"
                             >
                               -
                             </button>
 
-                            {/* Quantity Display */}
-                            <span className="text-lg font-semibold">
-                              {item.qty}
-                            </span>
+                            <input
+                              type="number"
+                              value={item.qty}
+                              onChange={(e) => handleChangeQty(item, e)}
+                              className="text-center w-12 border border-gray-300 rounded-md mx-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              min="0" // Optional: Prevent negative quantities
+                            />
 
-                            {/* Increase Button */}
                             <button
-                              onClick={handleIncrease}
+                              onClick={() =>
+                                handleUpdate(item.id, "inc", item.qty)
+                              }
                               className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
                             >
                               +

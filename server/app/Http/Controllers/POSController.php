@@ -7,19 +7,20 @@ use Illuminate\Http\Request;
 
 class POSController extends Controller
 {
-    public function processSale(Request $request) {
+    public function processSale(Request $request)
+    {
         $data = $request->validate([
             'items' => 'required|array',
-            'items.*.product_id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.id' => 'required|exists:products,id',
+            'items.*.qty' => 'required|integer|min:1',
         ]);
 
         $summary = [];
         $totalPrice = 0;
 
         foreach ($data['items'] as $item) {
-            $product = Products::find($item['product_id']);
-            $quantity = $item['quantity'];
+            $product = Products::find($item['id']);
+            $quantity = $item['qty'];
 
             // Validate stock
             if ($product->stock < $quantity) {

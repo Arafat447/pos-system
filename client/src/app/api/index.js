@@ -1,8 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api"; // Replace with your backend URL
+const API_URL = "http://localhost:8000/api";
 
-// Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
@@ -10,10 +9,9 @@ const axiosInstance = axios.create({
   },
 });
 
-// Add a request interceptor to include the token in all requests
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,27 +22,22 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Function to handle login
 export const login = async (credentials) => {
   return axiosInstance.post("/login", credentials);
 };
 
-// Function to handle product fetching
 export const fetchProducts = async () => {
   return axiosInstance.get("/products");
 };
 
-// Function to search for products
 export const searchProducts = async (query) => {
   return axiosInstance.get(`/products?search=${query}`);
 };
 
-// Function to handle adding a new product
 export const addProduct = async (productData) => {
   return axiosInstance.post("/products", productData);
 };
 
-// Function to process sales
 export const processSale = async (saleData) => {
   return axiosInstance.post("/pos", saleData);
 };

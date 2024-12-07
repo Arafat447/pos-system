@@ -1,6 +1,6 @@
 "use client";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { fetchProducts } from "../api";
+import { fetchProducts, processSale } from "../api";
 import { use, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -51,6 +51,12 @@ export default function pos() {
     } else {
       toast.error("Stock is not enough");
     }
+  };
+  const handleCheckout = () => {
+    processSale({ items: cart }).then((res) => {
+      toast.success(res.data.message);
+      console.log(res, "session");
+    });
   };
   console.log(dd, "cart");
   return (
@@ -196,21 +202,16 @@ export default function pos() {
                 Payable : <span className="font-semibold">{totalPayable}</span>
               </p>
             </div>
-            <div className="flex justify-end space-x-4">
-              <button
-                type="button"
-                className="px-6 py-2 border rounded-md dark:border-violet-600"
-              >
-                Back
-                <span className="sr-only sm:not-sr-only">to shop</span>
-              </button>
-              <button
-                type="button"
-                className="px-6 py-2 border rounded-md dark:bg-violet-600 dark:text-gray-50 dark:border-violet-600"
-              >
-                <span className="sr-only sm:not-sr-only">Continue to</span>
-                Checkout
-              </button>
+            <div style={{ minWidth: "600px" }}>
+              <div className="flex justify-end space-x-4">
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  className="px-6 py-2 border rounded-md dark:bg-violet-600 dark:text-gray-50 dark:border-violet-600"
+                >
+                  Checkout
+                </button>
+              </div>
             </div>
           </div>
         </div>

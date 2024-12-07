@@ -1,101 +1,94 @@
-import Image from "next/image";
-
-export default function Home() {
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { login } from "./api";
+export default function page() {
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const router = useRouter();
+  const handleChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();    
+      login(data).then((res) => {        
+        localStorage.setItem("token", res.data.token);
+        router.push("/pos");       
+      })
+  };
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex items-center justify-center min-h-screen p-6 bg-gray-50 ">
+      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 dark:bg-gray-100 dark:text-gray-800">
+        <div className="mb-8 text-center">
+          <h1 className="my-3 text-4xl font-bold">Sign in</h1>
+          <p className="text-sm dark:text-gray-600">
+            Sign in to access your account
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <form onSubmit={handleSubmit} className="space-y-12">
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block mb-2 text-sm">
+                Email address
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                onChange={handleChange}
+                placeholder="leroy@jenkins.com"
+                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+              />
+            </div>
+            <div>
+              <div className="flex justify-between mb-2">
+                <label htmlFor="password" className="text-sm">
+                  Password
+                </label>
+                {/* <a
+                  rel="noopener noreferrer"
+                  href="#"
+                  className="text-xs hover:underline dark:text-gray-600"
+                >
+                  Forgot password?
+                </a> */}
+              </div>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="*****"
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800"
+              />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <button
+                type="submit"
+                className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-600 dark:text-gray-50"
+              >
+                Sign in
+              </button>
+            </div>
+            <p className="px-6 text-sm text-center dark:text-gray-600">
+              Don't have an account yet?
+              <a
+                rel="noopener noreferrer"
+                href="#"
+                className="hover:underline dark:text-violet-600"
+              >
+                Sign up
+              </a>
+              .
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

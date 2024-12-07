@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { fetchProducts } from "../api";
+import Link from "next/link";
 
 export default function page() {
   const [products, setProducts] = useState([]);
@@ -12,7 +13,14 @@ export default function page() {
   return (
     <div className="bg-white min-h-[100vh]">
       <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">
-        <h1 className="mb-4 text-2xl font-semibold leading-tight">Products</h1>
+        <div className="flex justify-between">
+        <Link href="/dashboard">
+        <h1 className="text-2xl font-bold ">Dashboard</h1>
+        </Link>
+        <Link href="/pos">
+        <h1 className="text-2xl font-bold ">POS</h1>
+        </Link>
+        </div>
         <div className="overflow-x-auto">
           <table className="min-w-full text-xs">
             <colgroup>

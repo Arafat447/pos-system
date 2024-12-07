@@ -11,6 +11,7 @@ import {
   calculateTotal,
 } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 export default function pos() {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
@@ -63,7 +64,12 @@ export default function pos() {
     <div className="bg-white ">
       <ToastContainer />
       <div className="min-h-[100vh] text-black mx-auto container">
+        <div className="flex justify-between">
         <h1 className="text-2xl font-bold ">POS</h1>
+        <Link href="/dashboard">
+        <h1 className="text-2xl font-bold ">Dashboard</h1>
+        </Link>
+        </div>
         <div className="flex justify-center align-center">
           <div style={{ width: 400 }}>
             <ReactSearchAutocomplete

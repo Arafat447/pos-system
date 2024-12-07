@@ -15,7 +15,10 @@ export default function pos() {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cart);
-  const total = useSelector((state) => state.cart.total);
+  const { total, totalPayable, totalDiscount } = useSelector(
+    (state) => state.cart
+  );
+  const dd = useSelector((state) => state.cart);
   useEffect(() => {
     document.title = "Dashboard";
     fetchProducts().then((res) => setProducts(res?.data));
@@ -49,11 +52,11 @@ export default function pos() {
       toast.error("Stock is not enough");
     }
   };
-  console.log(cart, "cart");
+  console.log(dd, "cart");
   return (
-    <div className="bg-white">
+    <div className="bg-white ">
       <ToastContainer />
-      <div className="h-screen  text-black mx-auto container">
+      <div className="min-h-[100vh] text-black mx-auto container">
         <h1 className="text-2xl font-bold ">POS</h1>
         <div className="flex justify-center align-center">
           <div style={{ width: 400 }}>
@@ -67,7 +70,7 @@ export default function pos() {
             />
           </div>
         </div>
-        <div>
+        <div className="flex justify-center align-center mt-5">
           <div className="flex flex-col max-w-3xl p-6 space-y-4 sm:p-10 dark:bg-gray-50 dark:text-gray-800">
             <h2 className="text-xl font-semibold">Your cart</h2>
             <ul className="flex flex-col divide-y dark:divide-gray-300">
@@ -185,8 +188,12 @@ export default function pos() {
                 Total amount:
                 <span className="font-semibold">{total}</span>
               </p>
-              <p className="text-sm dark:text-gray-600">
-                Not including taxes and shipping costs
+              <p className="">
+                Discount :{" "}
+                <span className="font-semibold">{totalDiscount}</span>
+              </p>
+              <p className="">
+                Payable : <span className="font-semibold">{totalPayable}</span>
               </p>
             </div>
             <div className="flex justify-end space-x-4">

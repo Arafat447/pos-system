@@ -30,10 +30,55 @@ const cartSlice = createSlice({
       state.cart = state.cart.filter((item) => item.id !== id);
     },
     calculateTotal: (state) => {
-      state.total = state.cart.reduce(
-        (total, item) => total + item.price * item.qty,
-        0
-      );
+      let totalBeforeDiscount = 0;
+      let totalDiscount = 0;
+
+      state.cart.forEach((item) => {
+        const {
+          price,
+          qty,
+          stock,
+          trade_offer_min_qty,
+          trade_offer_get_qty,
+          discount,
+          discount_or_trade_offer_start_date,
+          discount_or_trade_offer_end_date,
+        } = item;
+
+        // Validate stock
+        if (qty > stock) {
+          console.warn(
+            `Quantity for ${item.name} exceeds stock! Adjusting to max available stock (${stock}).`
+          );
+          item.qty = stock;
+        }
+
+        const offerActive =
+          new Date() >= new Date(discount_or_trade_offer_start_date) &&
+          new Date() <= new Date(discount_or_trade_offer_end_date);
+
+        const basePrice = price * item.qty;
+
+        let bonusQty = 0;
+        if (offerActive && qty >= trade_offer_min_qty) {
+          const sets = Math.floor(qty / trade_offer_min_qty);
+          bonusQty = sets * trade_offer_get_qty;
+        }
+
+        const itemDiscount = offerActive ? discount * qty : 0;
+
+        const finalPrice = basePrice - itemDiscount;
+
+        totalBeforeDiscount += basePrice;
+        totalDiscount += itemDiscount;
+
+        item.finalPrice = finalPrice;
+        item.totalQty = qty + bonusQty;
+      });
+
+      state.total = totalBeforeDiscount;
+      state.totalDiscount = totalDiscount;
+      state.totalPayable = totalBeforeDiscount - totalDiscount;
     },
   },
 });

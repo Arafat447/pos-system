@@ -14,30 +14,31 @@ export default function page() {
     <div className="bg-white min-h-[100vh]">
       <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">
         <div className="flex justify-between">
-        <Link href="/dashboard">
-        <h1 className="text-2xl font-bold ">Dashboard</h1>
-        </Link>
-        <Link href="/pos">
-        <h1 className="text-2xl font-bold ">POS</h1>
-        </Link>
+          <Link href="/dashboard">
+            <h1 className="text-2xl font-bold ">Dashboard</h1>
+          </Link>
+          <Link href="/pos">
+            <h1 className="text-2xl font-bold ">POS</h1>
+          </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full text-xs">
-            <colgroup>
+            {/* <colgroup>
               <col />
               <col />
               <col />
               <col />
               <col />
               <col className="w-24" />
-            </colgroup>
+            </colgroup> */}
             <thead className="dark:bg-gray-300">
               <tr className="text-left">
                 <th className="p-3">Name</th>
                 <th className="p-3">Price</th>
                 <th className="p-3">Stock</th>
                 <th className="p-3 text-right">Discount</th>
-                <th className="p-3">Status</th>
+                <th className="p-3">Trade Offer Minimum Qty</th>
+                <th className="p-3">Trade Offer</th>
               </tr>
             </thead>
             <tbody>
@@ -59,10 +60,11 @@ export default function page() {
                     <td className="p-3 text-right">
                       <p>{product?.discount}</p>
                     </td>
-                    <td className="p-3 text-right ">
-                      <span className="px-3 py-1 font-semibold rounded-md dark:bg-violet-600 dark:text-gray-50">
-                        <span>Pending</span>
-                      </span>
+                    <td className="p-3 text-right">
+                      <p>{product?.trade_offer_min_qty}</p>
+                    </td>
+                    <td className="p-3 text-right">
+                      <p>{product?.trade_offer_get_qty}</p>
                     </td>
                   </tr>
                 );

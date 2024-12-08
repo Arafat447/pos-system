@@ -56,19 +56,17 @@ export default function pos() {
   const handleCheckout = () => {
     processSale({ items: cart }).then((res) => {
       toast.success(res.data.message);
-      console.log(res, "session");
     });
   };
-  console.log(dd, "cart");
   return (
     <div className="bg-white ">
       <ToastContainer />
       <div className="min-h-[100vh] text-black mx-auto container">
         <div className="flex justify-between">
-        <h1 className="text-2xl font-bold ">POS</h1>
-        <Link href="/dashboard">
-        <h1 className="text-2xl font-bold ">Dashboard</h1>
-        </Link>
+          <h1 className="text-2xl font-bold ">POS</h1>
+          <Link href="/dashboard">
+            <h1 className="text-2xl font-bold ">Dashboard</h1>
+          </Link>
         </div>
         <div className="flex justify-center align-center">
           <div style={{ width: 400 }}>
